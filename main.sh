@@ -34,9 +34,11 @@ if ! command -v dnsmasq &> /dev/null; then
   apt update && apt install -y dnsmasq
 fi
 
-# stop already running services
+# stop already running services and unmask them
 systemctl stop hostapd
 systemctl stop dnsmasq
+systemctl unmask hostapd
+systemctl unmask dnsmasq
 
 # configure network interface
 
@@ -90,11 +92,13 @@ EOF
 
 systemctl restart dnsmasq
 
-# start needed services
-systemctl enable hostapd
-systemctl enable dnsmasq
-systemctl start dnsmasq
-systemctl start hostapd
+# start needed services (with error checking)
+systemctl unmask hostapd
+systemctl unmask dnsmasq
+systemctl enable hostapd || echo "Warning: Failed to enable hostapd"
+systemctl enable dnsmasq || echo "Warning: Failed to enable dnsmasq"
+systemctl start dnsmasq || echo "Warning: Failed to start dnsmasq"
+systemctl start hostapd || echo "Warning: Failed to start hostapd"
 
 # launch ip forwarding
 echo 1 > /proc/sys/net/ipv4/ip_forward
