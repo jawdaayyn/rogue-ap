@@ -14,12 +14,12 @@ INTERNET_IFACE="eth0"
 IP_REDIRECTION=192.168.50.1 # 157.240.3.35 => facebook by default
 
 # if user choosed a custom ssid => overwrite the default one
-# while getopts "s:i:" opt; do
-#   case $opt in
-#     s) SSID="$OPTARG";;
-#     i) IP_REDIRECTION="$OPTARG";;
-#     \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
-#   esac
+while getopts "s:i:" opt; do
+  case $opt in
+    s) SSID="$OPTARG";;
+    i) IP_REDIRECTION="$OPTARG";;
+    \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
+  esac
 # done
 
 # ensure needed packages are installed (hostapd & dnsmasq)
