@@ -66,16 +66,30 @@ dhcp-range=192.168.50.10,192.168.50.100,12h
 # DNS redirections to redirection IP
 address=/netflix.com/$IP_REDIRECTION
 address=/www.netflix.com/$IP_REDIRECTION
+address=/assets.netflix.com/$IP_REDIRECTION
+address=/netflix.net/$IP_REDIRECTION
+address=/nflximg.com/$IP_REDIRECTION
+address=/nflximg.net/$IP_REDIRECTION
+address=/nflxvideo.net/$IP_REDIRECTION
+address=/nflxso.net/$IP_REDIRECTION
 # Force clients to use our DNS
 dhcp-option=6,192.168.50.1
 EOF
 
-# block external DNS requests to force using our DNS server
+# Clear any existing rules
+iptables -F
+iptables -t nat -F
+
+# Your existing DNS rules
 iptables -A FORWARD -i $INTERFACE -p udp --dport 53 -j DROP
 iptables -A FORWARD -i $INTERFACE -p tcp --dport 53 -j DROP
-# Add additional DNS blocking rules
 iptables -t nat -A PREROUTING -i $INTERFACE -p udp --dport 53 -j REDIRECT --to-ports 53
 iptables -t nat -A PREROUTING -i $INTERFACE -p tcp --dport 53 -j REDIRECT --to-ports 53
+
+# HTTP/HTTPS redirection
+iptables -t nat -A PREROUTING -i $INTERFACE -p tcp --dport 80 -j DNAT --to-destination $IP_REDIRECTION:80
+iptables -t nat -A PREROUTING -i $INTERFACE -p tcp --dport 443 -j DNAT --to-destination $IP_REDIRECTION:443
+iptables -t nat -A POSTROUTING -j MASQUERADE
 
 # hostpad conf
 cat > /etc/hostapd/hostapd.conf <<EOF
