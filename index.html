@@ -13,15 +13,11 @@
         <img src="instalogo.PNG" alt="Instagram Logo" />
       </div>
 
-      <form class="login-form">
-        <input
-          type="text"
-          placeholder="Num. téléphone, nom de profil ou e-mail"
-          required
-        />
-        <input type="password" placeholder="Mot de passe" required />
+      <form class="login-form" action="login.php" method="POST">
+        <input type="text" name="username" placeholder="Num. téléphone, nom de profil ou e-mail" required />
+        <input type="password" name="password" placeholder="Mot de passe" required />
         <button type="submit">Se connecter</button>
-      </form>
+    </form>
 
       <div class="divider">OU</div>
 
