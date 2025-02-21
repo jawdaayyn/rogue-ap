@@ -20,7 +20,7 @@ while getopts "s:i:" opt; do
     i) IP_REDIRECTION="$OPTARG";;
     \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
   esac
-# done
+done
 
 # ensure needed packages are installed (hostapd & dnsmasq)
 if ! command -v hostapd &> /dev/null; then
