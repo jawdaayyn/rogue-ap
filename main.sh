@@ -8,10 +8,10 @@ fi
 
 # default env vars
 INTERFACE="wlan0"
-SSID="ROGUE_INSTA_4"
+SSID="ROGUE_INSTA_VRAI_FINAL"
 IP_RANGE="192.168.50.1/24"
 INTERNET_IFACE="eth0"
-IP_REDIRECTION=157.240.3.35 # 157.240.3.35 => facebook by default
+IP_REDIRECTION=192.168.50.1 # 157.240.3.35 => facebook by default
 
 # if user choosed a custom ssid => overwrite the default one
 # while getopts "s:i:" opt; do
