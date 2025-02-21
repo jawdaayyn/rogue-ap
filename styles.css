@@ -1,0 +1,210 @@
+/* Reset */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Conteneur principal */
+.login-container {
+  background: white;
+  width: 350px;
+  padding: 50px 20px; /* Ajout de padding pour espacer */
+  border: 1px solid #dbdbdb;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Instagram */
+.logo img {
+  width: 175px;
+  margin-bottom: 25px; /* Ajout d'un espacement */
+}
+
+/* Formulaire */
+.login-form {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.login-form input {
+  width: calc(100% - 20px);
+  padding: 12px;
+  margin: 8px 0; /* Augmentation de l'espacement */
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bord arrondi */
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+  margin-top: 12px;
+}
+
+.login-form button:hover {
+  background-color: #007acc; /* Changement de couleur au survol */
+}
+
+.divider {
+  margin: 20px 0; /* Plus d'espace avant et après */
+  color: #666666;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #dbdbdb;
+  margin: 0 10px;
+}
+
+/* Icône Facebook + texte */
+.fb-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #0095f6;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px;
+  margin-top: 15px; /* Ajout d'espace */
+}
+
+.fb-icon {
+  width: 20px; /* Augmente la taille de l'icône */
+  height: auto; /* Garde les proportions */
+  margin-right: 8px; /* Espacement entre l'icône et le texte */
+  vertical-align: middle; /* Aligne l'icône avec le texte */
+}
+
+/* Mot de passe oublié */
+.forgot-password {
+  display: block;
+  font-size: 12px;
+  color: #00376b;
+  text-decoration: none;
+  margin-top: 15px; /* Ajout d'espacement */
+}
+
+/* Texte signalement */
+.report-text {
+  font-size: 12px;
+  color: #737373;
+  text-align: center;
+  margin: 15px 0; /* Ajout d'espace */
+}
+
+.report-text a {
+  color: #00376b;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Encadré "Vous n'avez pas de compte ?" */
+.signup-container {
+  font-size: 14px;
+  padding: 15px 0;
+  border: 1px solid #dbdbdb;
+  background-color: white;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.signup-container a {
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Section téléchargement */
+.download-app {
+  margin-top: 25px; /* Ajout d'espace */
+}
+
+.download-app img {
+  width: 135px;
+  margin: 5px;
+}
+
+/* Footer */
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  background: #fafafa;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.footer-links a {
+  color: #737373;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #737373;
+}
+.extra-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Encadré "Inscrivez-vous" */
+.signup-container {
+  font-size: 14px;
+  padding: 15px;
+  border: 1px solid #dbdbdb;
+  background-color: white;
+  width: 350px;
+  text-align: center;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+/* Téléchargement application */
+.download-app {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.download-app img {
+  width: 130px;
+  margin: 5px;
+}
