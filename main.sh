@@ -8,7 +8,7 @@ fi
 
 # default env vars
 INTERFACE="wlan0"
-SSID="ROGUE_INSTA_VRAI_FINAL"
+SSID="DEFAULT_ROGUE_AP"
 IP_RANGE="192.168.50.1/24"
 INTERNET_IFACE="eth0"
 IP_REDIRECTION=192.168.50.1 # 157.240.3.35 => facebook by default
@@ -17,7 +17,13 @@ IP_REDIRECTION=192.168.50.1 # 157.240.3.35 => facebook by default
 while getopts "s:i:" opt; do
   case $opt in
     s) SSID="$OPTARG";;
-    i) IP_REDIRECTION="$OPTARG";;
+    i)
+      if [ -z "$OPTARG" ]; then
+        echo "Error: -i option requires an IP address" >&2
+        exit 1
+      fi
+      IP_REDIRECTION="$OPTARG"
+      ;;
     \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
   esac
 done
