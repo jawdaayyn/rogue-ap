@@ -6,12 +6,22 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
-# env vars
+# default env vars
 INTERFACE="wlan0"
-SSID="MyAccessPoint"
+SSID="iPhone de Lucas"
 PASSWORD="password123"
 IP_RANGE="192.168.50.1/24"
 INTERNET_IFACE="eth0"
+IP_REDIRECTION=157.240.3.35 # 157.240.3.35 => facebook by default
+
+# if user choosed a custom ssid => overwrite the default one
+while getopts "s:i:" opt; do
+  case $opt in
+    s) SSID="$OPTARG";;
+    i) IP_REDIRECTION="$OPTARG";;
+    \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
+  esac
+done
 
 # ensure needed packages are installed (hostapd & dnsmasq)
 if ! command -v hostapd &> /dev/null; then
@@ -28,18 +38,38 @@ fi
 systemctl stop hostapd
 systemctl stop dnsmasq
 
-# Configure the network interface
+# configure network interface
+
 ip link set $INTERFACE down
 ip addr flush dev $INTERFACE
 ip addr add 192.168.50.1/24 dev $INTERFACE
 ip link set $INTERFACE up
 
-# Configure dnsmasq
+# install dnsmasq if package is missing
+if ! command -v dnsmasq &> /dev/null; then
+  echo "dnsmasq not found, installing..."
+  apt update && apt install -y dnsmasq
+fi
+
+echo "redirect to $IP_REDIRECTION..."
+# configure dnsmasq with custom dns entries
 cat > /etc/dnsmasq.conf <<EOF
 interface=$INTERFACE
 dhcp-range=192.168.50.10,192.168.50.100,12h
+# Instagram redirections to redirection IP
+address=/instagram.com/$IP_REDIRECTION
+address=/www.instagram.com/$IP_REDIRECTION
+address=/cdninstagram.com/$IP_REDIRECTION
+address=/i.instagram.com/$IP_REDIRECTION
+address=/graph.instagram.com/$IP_REDIRECTION
+address=/api.instagram.com/$IP_REDIRECTION
+# Force clients to use our DNS
+dhcp-option=6,192.168.50.1
 EOF
 
+# block external DNS requests to force using our DNS server
+iptables -A FORWARD -i $INTERFACE -p udp --dport 53 -j DROP
+iptables -A FORWARD -i $INTERFACE -p tcp --dport 53 -j DROP
 
 # hostpad conf
 cat > /etc/hostapd/hostapd.conf <<EOF
@@ -57,6 +87,8 @@ wpa_passphrase=$PASSWORD
 wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP
 EOF
+
+systemctl restart dnsmasq
 
 # start needed services
 systemctl enable hostapd
