@@ -136,7 +136,7 @@ LOGFILE="logs/capture_$(date +%Y%m%d_%H%M%S).txt"
 echo "Starting packet capture. Logs will be saved to: $LOGFILE"
 
 # modified tcpdump command to be human readable (-A), show timestamps (-tttt), and verbose (-v)
-tcpdump -i $INTERFACE -tttt -v -A 'not port 22' > "$LOGFILE" &
+tcpdump -i $INTERFACE -tttt -v -A > "$LOGFILE" &
 TCPDUMP_PID=$!
 
 # show result on console
