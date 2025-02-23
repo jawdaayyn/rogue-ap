@@ -39,6 +39,12 @@ if ! command -v dnsmasq &> /dev/null; then
   apt update && apt install -y dnsmasq
 fi
 
+# ensure tcpdump is installed
+if ! command -v tcpdump &> /dev/null; then
+  echo "tcpdump not found, installing..."
+  apt update && apt install -y tcpdump
+fi
+
 # stop already running services and unmask them
 systemctl stop hostapd
 systemctl stop dnsmasq
@@ -122,5 +128,24 @@ iptables -t nat -A POSTROUTING -o $INTERNET_IFACE -j MASQUERADE
 iptables -A FORWARD -i $INTERNET_IFACE -o $INTERFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $INTERFACE -o $INTERNET_IFACE -j ACCEPT
 
+# Create logs directory if it doesn't exist
+mkdir -p logs
+
+# Start packet capture in background with timestamp in filename
+LOGFILE="logs/capture_$(date +%Y%m%d_%H%M%S).txt"
+echo "Starting packet capture. Logs will be saved to: $LOGFILE"
+tcpdump -i $INTERFACE -w "$LOGFILE" &
+TCPDUMP_PID=$!
+
 # show result on console
 echo "Access Point '$SSID' created on interface $INTERFACE with internet access"
+echo "Packet capture running with PID: $TCPDUMP_PID"
+echo "Press Ctrl+C to stop the access point and packet capture"
+
+# Handle script termination
+trap 'kill $TCPDUMP_PID; exit' INT TERM
+
+# Keep script running to maintain packet capture
+while true; do
+    sleep 1
+done
