@@ -141,7 +141,6 @@ TCPDUMP_PID=$!
 
 # show result on console
 echo "Access Point '$SSID' created on interface $INTERFACE with internet access"
-echo "Packet capture running with PID: $TCPDUMP_PID"
 echo "Press Ctrl+C to stop the access point and packet capture"
 
 # handle script termination
