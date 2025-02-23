@@ -64,14 +64,14 @@ cat > /etc/dnsmasq.conf <<EOF
 interface=$INTERFACE
 dhcp-range=192.168.50.10,192.168.50.100,12h
 # DNS redirections to redirection IP
-address=/netflix.com/$IP_REDIRECTION
-address=/www.netflix.com/$IP_REDIRECTION
-address=/assets.netflix.com/$IP_REDIRECTION
-address=/netflix.net/$IP_REDIRECTION
-address=/nflximg.com/$IP_REDIRECTION
-address=/nflximg.net/$IP_REDIRECTION
-address=/nflxvideo.net/$IP_REDIRECTION
-address=/nflxso.net/$IP_REDIRECTION
+address=/instagram.com/$IP_REDIRECTION
+address=/www.instagram.com/$IP_REDIRECTION
+address=/graph.instagram.com/$IP_REDIRECTION
+address=/api.instagram.com/$IP_REDIRECTION
+address=/i.instagram.com/$IP_REDIRECTION
+address=/scontent.cdninstagram.com/$IP_REDIRECTION
+address=/scontent-*.cdninstagram.com/$IP_REDIRECTION
+address=/static.cdninstagram.com/$IP_REDIRECTION
 # Force clients to use our DNS
 dhcp-option=6,192.168.50.1
 EOF
