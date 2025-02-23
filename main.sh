@@ -120,10 +120,10 @@ systemctl enable dnsmasq || echo "Warning: Failed to enable dnsmasq"
 systemctl start dnsmasq || echo "Warning: Failed to start dnsmasq"
 systemctl start hostapd || echo "Warning: Failed to start hostapd"
 
-# launch ip forwarding
+# launch ip forwarding (moved before packet capture)
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-# set up NAT with iptables
+# set up NAT with iptables (ensure these come before other iptables rules)
 iptables -t nat -A POSTROUTING -o $INTERNET_IFACE -j MASQUERADE
 iptables -A FORWARD -i $INTERNET_IFACE -o $INTERFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $INTERFACE -o $INTERNET_IFACE -j ACCEPT
@@ -134,7 +134,8 @@ mkdir -p logs
 # Start packet capture in background with timestamp in filename
 LOGFILE="logs/capture_$(date +%Y%m%d_%H%M%S).txt"
 echo "Starting packet capture. Logs will be saved to: $LOGFILE"
-tcpdump -i $INTERFACE -w "$LOGFILE" &
+# Modified tcpdump command to be human readable (-A), show timestamps (-tttt), and verbose (-v)
+tcpdump -i $INTERFACE -tttt -v -A 'not port 22' > "$LOGFILE" &
 TCPDUMP_PID=$!
 
 # show result on console
