@@ -6,16 +6,6 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
-# Add cleanup function for tcpdump
-cleanup() {
-    if [ ! -z "$TCPDUMP_PID" ]; then
-        kill $TCPDUMP_PID 2>/dev/null
-    fi
-}
-
-# Set up trap
-trap cleanup EXIT
-
 # default env vars
 INTERFACE="wlan0"
 SSID="DEFAULT_ROGUE_AP"
@@ -134,13 +124,3 @@ iptables -A FORWARD -i $INTERFACE -o $INTERNET_IFACE -j ACCEPT
 
 # show result on console
 echo "Access Point '$SSID' created on interface $INTERFACE with internet access"
-
-# Create logs directory if it doesn't exist
-mkdir -p logs
-
-# Start tcpdump in background and save to timestamped file
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-tcpdump -i "$INTERFACE" -w "logs/capture_${TIMESTAMP}.pcap" &
-TCPDUMP_PID=$!
-
-echo "TCPDump started with PID $TCPDUMP_PID. Capturing traffic to logs/capture_${TIMESTAMP}.pcap"
