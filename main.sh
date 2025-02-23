@@ -82,7 +82,7 @@ address=/static.cdninstagram.com/$IP_REDIRECTION
 dhcp-option=6,192.168.50.1
 EOF
 
-# Clear any existing rules
+# clear any existing rules from iptable
 iptables -F
 iptables -t nat -F
 
@@ -128,13 +128,14 @@ iptables -t nat -A POSTROUTING -o $INTERNET_IFACE -j MASQUERADE
 iptables -A FORWARD -i $INTERNET_IFACE -o $INTERFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $INTERFACE -o $INTERNET_IFACE -j ACCEPT
 
-# Create logs directory if it doesn't exist
+# create logs directory if it doesn't exist
 mkdir -p logs
 
-# Start packet capture in background with timestamp in filename
+# start packet capture in background with timestamp in filename
 LOGFILE="logs/capture_$(date +%Y%m%d_%H%M%S).txt"
 echo "Starting packet capture. Logs will be saved to: $LOGFILE"
-# Modified tcpdump command to be human readable (-A), show timestamps (-tttt), and verbose (-v)
+
+# modified tcpdump command to be human readable (-A), show timestamps (-tttt), and verbose (-v)
 tcpdump -i $INTERFACE -tttt -v -A 'not port 22' > "$LOGFILE" &
 TCPDUMP_PID=$!
 
@@ -143,10 +144,10 @@ echo "Access Point '$SSID' created on interface $INTERFACE with internet access"
 echo "Packet capture running with PID: $TCPDUMP_PID"
 echo "Press Ctrl+C to stop the access point and packet capture"
 
-# Handle script termination
+# handle script termination
 trap 'kill $TCPDUMP_PID; exit' INT TERM
 
-# Keep script running to maintain packet capture
+# keep script running to maintain packet capture
 while true; do
     sleep 1
 done
